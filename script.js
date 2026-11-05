@@ -2,7 +2,13 @@
    ใส่ลิงก์หน้าเว็บสินค้าจริงของแต่ละตัวตรงนี้ (ถ้าเว้นว่าง QR จะพาไปที่ลิงก์ของเว็บนี้ + #รหัสสินค้า
    ซึ่งจะเปิดหน้าสินค้านั้นขึ้นมาอัตโนมัติ)  เช่น  'MARS-001':'https://orbital.com/mars'  */
 const LINKS={
-// 'MARS-001':'', 'JUPITER-002':'', 'NEPTUNE-003':'', 'PLUTO-004':'', 'PLUTO-005':'', 'URANUS-006':'', 'EARTH-007':''
+'MARS-001':'mars.html',
+'JUPITER-002':'jupiter.html',
+'NEPTUNE-003':'neptune.html',
+'PLUTO-004':'pluto-004.html',
+'PLUTO-005':'pluto-005.html',
+'URANUS-006':'uranus.html',
+'EARTH-007':'earth.html'
 };
 const IMG={"download": ["images/mars.webp"], "download__1_": ["images/jupiter.webp"], "download__2_": ["images/neptune.webp"], "download__3_": ["images/pluto-004.webp"], "download__4_": ["images/pluto-005.webp"], "download__5_": ["images/uranus.webp"], "download__6_": ["images/earth.webp"]};
 const P=[
@@ -17,7 +23,7 @@ P.forEach((p,i)=>p.b='images/back-'+String(i+1).padStart(3,'0')+'.webp'); // ร
 const $=s=>document.getElementById(s),R=document.documentElement;let cur=0;
 const src=i=>IMG[P[i].f][0];
 const base=()=>location.href.split('#')[0];
-const link=p=>LINKS[p.c]||base()+'#'+p.c; // URL ที่ฝังใน QR
+const link=p=>new URL(LINKS[p.c],location.href).href; // URL ที่ฝังใน QR
 P.forEach(p=>{const im=new Image();im.src=p.b}); // preload ด้านหลัง
 
 /* ───────── sound + haptic ───────── */
@@ -56,7 +62,7 @@ b.style.cssText+=`width:${s}px;height:${s}px;left:${68+Math.random()*30}%;top:${
 function openM(i){$('mo').classList.add('on');document.body.style.overflow='hidden';show(i)}
 function closeM(){$('mo').classList.remove('on');document.body.style.overflow='';history.replaceState(null,'',location.pathname+location.search)}
 function scan(){const q=$('qr');q.classList.add('ok');navigator.vibrate&&navigator.vibrate(25);
-setTimeout(()=>{q.classList.remove('ok');const p=P[cur];if(LINKS[p.c]){tear();setTimeout(()=>window.open(LINKS[p.c],'_blank','noopener'),500)}else tear()},420)}
+setTimeout(()=>{q.classList.remove('ok');const p=P[cur];if(LINKS[p.c]){tear();setTimeout(()=>location.href=LINKS[p.c],900)}else tear()},420)}
 let drag=null;const st=$('stub');
 st.onpointerdown=e=>{if($('tk').classList.contains('torn'))return;drag={x:e.clientX,y:e.clientY};st.setPointerCapture(e.pointerId);$('tk').classList.add('drag');st.style.transition='none'};
 st.onpointermove=e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;st.style.transform=`translate(${dx}px,${dy}px) rotate(${dx/12}deg)`;st.style.opacity=Math.max(.3,1-Math.hypot(dx,dy)/400)};
@@ -71,7 +77,7 @@ addEventListener('keydown',e=>{if(!$('mo').classList.contains('on'))return;if(e.
 (function(){const k=P.findIndex(p=>p.c===decodeURIComponent(location.hash.slice(1)));if(k>=0){openM(k);setTimeout(tear,900)}})();
 
 /* ───────── hero: ตั๋วหมุนรอบแกนตั้ง (ลากเพื่อหมุน / แตะเพื่อสะบัดพลิก) ───────── */
-(function(){const h=$('h3'),sp=$('hs'),sh=document.querySelector('.hshadow');qrInto($('hq'),base());
+(function(){const h=$('h3'),sp=$('hs'),sh=document.querySelector('.hshadow');
 const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let ang=-18,vel=0,dn=false,lx=0,mv=0;
 function frame(){if(!dn){if(Math.abs(vel)>.05){ang+=vel;vel*=.95}else if(!calm)ang+=.45}
@@ -80,3 +86,9 @@ frame();
 h.onpointerdown=e=>{dn=true;lx=e.clientX;mv=0;vel=0;h.setPointerCapture(e.pointerId)};
 h.onpointermove=e=>{if(!dn)return;const dx=e.clientX-lx;lx=e.clientX;ang+=dx*.45;vel=dx*.45;mv+=Math.abs(dx)};
 h.onpointerup=h.onpointercancel=()=>{if(!dn)return;dn=false;if(mv<5)vel=16}})();
+
+/* v2: ปัดซ้าย/ขวาเปลี่ยนภารกิจ */
+(function(){let x0=null,y0=0;const s=$('scene');
+s.addEventListener('touchstart',e=>{if(e.target.closest('#stub')){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+s.addEventListener('touchend',e=>{if(x0==null)return;const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;x0=null;
+if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){navigator.vibrate&&navigator.vibrate(12);show(cur+(dx<0?1:-1))}},{passive:true})})();
