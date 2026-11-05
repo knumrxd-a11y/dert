@@ -52,7 +52,7 @@ footer{padding:40px 7%;color:var(--mu);font-size:12px;letter-spacing:.15em;text-
 .tk.torn .b{transform:translate(8%,-14%) rotate(14deg);opacity:.0;pointer-events:none}
 .tk.torn .a{animation:sh .5s}@keyframes sh{30%{transform:translateX(-6px)}60%{transform:translateX(3px)}}
 .tk .sp{position:relative;display:block;width:100%;visibility:hidden}
-.tk::after{content:"DRAG THE STUB TO TEAR ↗  ·  TAP QR TO OPEN";position:absolute;right:2%;bottom:-26px;font-size:10px;letter-spacing:.2em;color:var(--gold);opacity:.8;white-space:nowrap}.tk.torn::after{opacity:0}
+.tk::after{content:"DRAG THE STUB TO TEAR ↗︎  ·  TAP QR TO OPEN";position:absolute;right:2%;bottom:-26px;font-size:10px;letter-spacing:.2em;color:var(--gold);opacity:.8;white-space:nowrap}.tk.torn::after{opacity:0}
 /* QR ที่สร้างใหม่ต่อสินค้า — วางทับ QR เดิมบนตั๋ว (อยู่บนตัวฉีก) */
 .qr{position:absolute;left:80.2%;top:24.5%;width:12.1%;aspect-ratio:1;padding:0;background:#fffdf7;border-radius:7%;box-shadow:0 4px 14px #0006,0 0 0 1px #f3dfa2aa;cursor:pointer;overflow:hidden;transition:transform .3s var(--e)}
 .qr:hover{transform:scale(1.06)}.qr svg{display:block;width:100%;height:100%;padding:11%}
@@ -90,7 +90,7 @@ nav{padding:14px 6%;letter-spacing:.3em;font-size:14px;background:linear-gradien
 h2{padding:0 6%;font-size:40px;text-align:center}.sub{padding:6px 6% 22px;text-align:center;font-size:13px}
 .grid{grid-template-columns:1fr;gap:26px;padding:0 6% 70px}.card b{font-size:14px;margin-top:10px}.card small{font-size:12px;display:block;margin-top:2px}
 .mo{padding:calc(14px + env(safe-area-inset-top,0px)) 4% calc(14px + env(safe-area-inset-bottom,0px))}.scene{width:100%;margin-top:6px}
-.tk::after{content:"DRAG STUB TO TEAR ↗  ·  SWIPE FOR NEXT";left:0;right:0;text-align:center;bottom:-24px;font-size:9px;letter-spacing:.16em}
+.tk::after{content:"DRAG STUB TO TEAR ↗︎  ·  SWIPE FOR NEXT";left:0;right:0;text-align:center;bottom:-24px;font-size:9px;letter-spacing:.16em}
 .info{margin-top:42px;padding:0 4px}.info h3{font-size:34px;margin:6px 0 10px}.info p{font-size:14px;line-height:1.65}.info .code{font-size:10px;letter-spacing:.22em}
 .ctl{display:grid;grid-template-columns:1fr 1.15fr 1fr 1fr;gap:8px;margin:22px 0 16px;width:100%}
 .ctl button{padding:12px 4px;font-size:11px;letter-spacing:.06em;white-space:nowrap}.ctl button:active{transform:scale(.94);background:#ffffff38}
@@ -104,3 +104,16 @@ h2{padding:0 6%;font-size:40px;text-align:center}.sub{padding:6px 6% 22px;text-a
 .rb button{width:42px;height:42px;border-radius:50%;border:1px solid #fff3;background:#ffffff14;color:var(--tx);font-size:16px;cursor:pointer;transition:background .3s,transform .3s var(--e)}
 .rb button:hover{background:#ffffff2e;transform:translateY(-2px)}.rb button:active{transform:scale(.92)}
 @media(hover:none){.rb{display:none}}
+/* v4 · warp page transition */
+html.arr::before{content:"";position:fixed;inset:0;z-index:99;background:#0d0e14}
+#pt{position:fixed;inset:0;z-index:100;pointer-events:none;visibility:hidden;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--pc,#c8643c) 55%,#0d0e14),#0d0e14 72%);clip-path:circle(0 at var(--ox,50%) var(--oy,50%));transition:clip-path .75s cubic-bezier(.7,0,.25,1),visibility 0s .75s}
+#pt.in{visibility:visible;pointer-events:all;clip-path:circle(150% at var(--ox,50%) var(--oy,50%));transition:clip-path .75s cubic-bezier(.7,0,.25,1),visibility 0s}
+#pt.in.na{transition:none}
+#pt canvas{position:absolute;inset:0;width:100%;height:100%}
+#pt .lb{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%) scale(.94);text-align:center;opacity:0;transition:opacity .3s,transform .6s var(--e)}
+#pt.in .lb{opacity:1;transform:translateY(-50%);transition:opacity .45s .25s,transform .8s .25s var(--e)}#pt.in.na .lb{transition:none}
+#pt small{display:block;color:var(--gold);font-size:11px;letter-spacing:.4em;margin-bottom:10px}
+#pt strong{display:block;font-family:'Cormorant Garamond','Noto Sans Thai',serif;font-style:italic;font-weight:500;font-size:clamp(34px,9vw,60px);letter-spacing:.06em;text-shadow:0 0 30px var(--pc,#c8643c)}
+
+/* v5 · ซ่อนปุ่ม CTA บนมือถือ (มีเมนู ALL MISSIONS และตั๋วอยู่แล้ว) */
+@media(max-width:760px){.hero .btn{display:none}.hero p.d{margin:16px 0 10px}}

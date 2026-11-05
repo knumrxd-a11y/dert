@@ -62,7 +62,7 @@ b.style.cssText+=`width:${s}px;height:${s}px;left:${68+Math.random()*30}%;top:${
 function openM(i){$('mo').classList.add('on');document.body.style.overflow='hidden';show(i)}
 function closeM(){$('mo').classList.remove('on');document.body.style.overflow='';history.replaceState(null,'',location.pathname+location.search)}
 function scan(){const q=$('qr');q.classList.add('ok');navigator.vibrate&&navigator.vibrate(25);
-setTimeout(()=>{q.classList.remove('ok');const p=P[cur];if(LINKS[p.c]){tear();setTimeout(()=>location.href=LINKS[p.c],900)}else tear()},420)}
+setTimeout(()=>{q.classList.remove('ok');const p=P[cur];if(LINKS[p.c]){tear();setTimeout(()=>window.goTo?goTo(LINKS[p.c]):location.href=LINKS[p.c],700)}else tear()},420)}
 let drag=null;const st=$('stub');
 st.onpointerdown=e=>{if($('tk').classList.contains('torn'))return;drag={x:e.clientX,y:e.clientY};st.setPointerCapture(e.pointerId);$('tk').classList.add('drag');st.style.transition='none'};
 st.onpointermove=e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;st.style.transform=`translate(${dx}px,${dy}px) rotate(${dx/12}deg)`;st.style.opacity=Math.max(.3,1-Math.hypot(dx,dy)/400)};
